@@ -106,10 +106,15 @@ class TikTokMod(loader.Module):
             "max_filesize": self.config["max_size_mb"] * 1024 * 1024,
         }
         if audio:
-            options |= {
-                "format": "bestaudio/best",
-                "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "m4a"}],
-            }
+            # "audio" is TikTok's original sound (mp3 128k); the track inside the video is only aac 64k.
+            # preferredcodec "best" copies the stream as is — re-encoding lossy audio is what made it sound bad
+            if shutil.which("ffmpeg"):
+                options |= {
+                    "format": "audio/bestaudio/best",
+                    "postprocessors": [{"key": "FFmpegExtractAudio", "preferredcodec": "best"}],
+                }
+            else:
+                options["format"] = "audio/bestaudio"
         else:
             options["format"] = VIDEO_FORMAT
             if shutil.which("ffmpeg"):
@@ -157,10 +162,6 @@ class TikTokMod(loader.Module):
         )
 
     async def _send(self, message: Message, url: str, audio: bool = False, auto: bool = False):
-        if audio and not shutil.which("ffmpeg"):
-            await utils.answer(message, self.strings("no_ffmpeg"))
-            return
-
         if "/photo/" in url:
             await utils.answer(message, self.strings("photo_post"))
             return
@@ -177,6 +178,9 @@ class TikTokMod(loader.Module):
             try:
                 info = await asyncio.to_thread(self._download, url, workdir, audio)
             except Exception as e:
+                if audio and not shutil.which("ffmpeg"):
+                    await utils.answer(status, self.strings("no_ffmpeg"))
+                    return
                 error = ANSI_RE.sub("", str(e))
                 error = re.sub(r"^\s*ERROR:\s*(\[[^\]]+\]\s*)?(\d+:\s*)?", "", error).strip()
                 await utils.answer(status, self.strings("failed").format(error=utils.escape_html(error[:300])))
