@@ -102,6 +102,8 @@ class TikTokMod(loader.Module):
             "no_warnings": True,
             "noprogress": True,
             "noplaylist": True,
+            # a profile link would otherwise download every video on it
+            "playlist_items": "1",
             "socket_timeout": 20,
             "max_filesize": self.config["max_size_mb"] * 1024 * 1024,
         }
