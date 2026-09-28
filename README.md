@@ -38,6 +38,7 @@
 |---|---|---|
 | [**TikTok**](#-tiktok) | Скачивает видео из TikTok без водяного знака и звук из них | `.tt` `.tiktok` `.tta` |
 | [**Circle**](#-circle) | Делает из видео кружок, а из любого медиа со звуком — голосовое | `.circle` `.krug` `.gs` `.tovoice` |
+| [**Neofetch**](#-neofetch) | Информация о системе в стиле neofetch, с сердцем Kage | `.neofetch` |
 | [**Hentai**](#-hentai) | Случайные аниме-арты 18+ и SFW-вайфу с waifu.im, под спойлером | `.hentai` `.waifu` |
 
 ---
@@ -89,6 +90,36 @@
 | `.gs` / `.tovoice` | Голосовое из видео, кружка, аудио или другого голосового: Opus, моно, с настоящей волной звука |
 
 Работает через ffmpeg (в Docker-образе Kage он уже есть). Всё конвертируется у тебя на сервере, файлы никуда не уходят.
+
+---
+
+### 🖥 Neofetch
+
+Информация о системе в стиле neofetch — без самой программы neofetch (её забросили в 2024-м), на psutil,
+поэтому работает в Docker, на VPS и на Mac одинаково. Ширина подобрана под экран телефона.
+
+```
+ ▄██▄ ▄██▄  gerdacod@kage
+███████████ ─────────────
+ ▀███████▀  OS     Debian 12 · Docker
+   ▀███▀    Kernel 6.12.76
+     ▀      Uptime 3d 4h 12m
+            CPU    Intel Core i7-9750H
+            Load   7% · 4 cores
+            RAM    318.3M / 1.9G (23%)
+            Disk   8.4G / 15.6G (57%)
+            Python 3.13.15
+            Bot    Kage 1.0.0 · 2h 5m
+            Mods   51
+            Ping   84 ms
+```
+
+| Команда | Описание |
+|---|---|
+| `.neofetch` | Информация о системе |
+| `.neofetch -n` | Вывод самой программы neofetch, если она установлена |
+
+**Настройки** (`.config Neofetch`): `logo` — показывать сердце Kage (по умолчанию включено).
 
 ---
 
@@ -210,6 +241,7 @@ kage-modules/
 ├── tiktok.py       свои модули (MIT)
 ├── hentai.py
 ├── circle.py
+├── neofetch.py
 ├── community/      модули сообщества под исходными лицензиями
 └── assets/         баннеры для README и превью в .help
 ```
@@ -235,5 +267,5 @@ kage-modules/
 
 ## 📜 Лицензия
 
-Свои модули (`tiktok`, `hentai`, `circle`) — [MIT](LICENSE) © [gerdaroot](https://github.com/gerdaroot).
+Свои модули (`tiktok`, `hentai`, `circle`, `neofetch`) — [MIT](LICENSE) © [gerdaroot](https://github.com/gerdaroot).
 Модули в `community/` — под лицензиями их авторов, указанными в начале каждого файла.
